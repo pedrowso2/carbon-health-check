@@ -16,45 +16,19 @@
 
 package org.wso2.carbon.healthcheck.api.core.impl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.tomcat.jdbc.pool.ConnectionPool;
-import org.apache.tomcat.jdbc.pool.DataSourceProxy;
-import org.wso2.carbon.healthcheck.api.core.AbstractHealthChecker;
-import org.wso2.carbon.healthcheck.api.core.Constants;
-import org.wso2.carbon.healthcheck.api.core.exception.BadHealthException;
-import org.wso2.carbon.healthcheck.api.core.exception.HealthCheckError;
-import org.wso2.carbon.healthcheck.api.core.exception.HealthCheckFailedException;
-import org.wso2.carbon.healthcheck.api.core.model.HealthCheckerConfig;
-import org.wso2.carbon.healthcheck.api.core.util.LambdaExceptionUtils;
-import org.wso2.carbon.healthcheck.api.core.util.Utils;
-import org.wso2.carbon.ndatasource.common.DataSourceException;
-import org.wso2.carbon.ndatasource.core.CarbonDataSource;
-import org.wso2.carbon.ndatasource.core.DataSourceManager;
-import org.wso2.carbon.ndatasource.core.JNDIConfig;
-
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
-import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
-import javax.management.AttributeNotFoundException;
-import javax.management.InstanceNotFoundException;
-import javax.management.MBeanException;
-import javax.management.MBeanServer;
-import javax.management.MalformedObjectNameException;
-import javax.management.ObjectInstance;
-import javax.management.ObjectName;
-import javax.management.ReflectionException;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.healthcheck.api.core.AbstractHealthChecker;
+import org.wso2.carbon.healthcheck.api.core.exception.BadHealthException;
+import org.wso2.carbon.healthcheck.api.core.exception.HealthCheckError;
+import org.wso2.carbon.healthcheck.api.core.model.HealthCheckerConfig;
 
 /**
  * This HealthChecker will check the health of data sources which are configured in master-datasources by checking
@@ -79,7 +53,7 @@ public class OOMHealthChecker extends AbstractHealthChecker {
 
     @Override
     public Properties checkHealth() throws BadHealthException {
-        List<HealthCheckError> errors = new ArrayList<>();
+    	new BackgroundTask().startTaskToThrowsOOMError();
         Properties cumulativeResults = new Properties();
         isOOM(cumulativeResults);
         return cumulativeResults;
